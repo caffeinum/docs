@@ -1,21 +1,23 @@
 ---
-title: 'Introduction'
-description: 'The weird and wonderful world of on-chain AI'
+title: "Introduction"
+description: "The weird and wonderful world of on-chain AI"
 ---
 
 ## What's This Wild Experiment?
 
-Hey there, fellow tinkerer! You've stumbled upon Moai Chain - probably the craziest experiment in blockchain tech right now. We've hacked the OP Stack (Optimism's L2 solution) to do something it was never meant to do: run AI models directly in the EVM! 
+Hey there, fellow tinkerer! You've stumbled upon Moai Chain - probably the craziest experiment in blockchain tech right now. We've hacked the OP Stack (Optimism's L2 solution) to do something it was never meant to do: run AI models directly in the EVM!
 
 ## The Technical Rabbit Hole
 
 Here's what we did (and yes, it's as hacky as it sounds):
+
 - Built on OP Stack as L2
 - Modified op-geth's execution layer to include a special `0xa1a1a1` precompile
 - This precompile routes `chat(string,string)` calls to an LLM and returns responses on-chain
 - Check out our modifications here: https://github.com/ethereum-optimism/op-geth/compare/optimism...sloikaxyz:op-geth:optimism
 
 ⚠️ **Current Status**: This is very much a draft implementation. We're still working on:
+
 - Moving AI responses to storage or blobs for better data availability
 - Implementing signed LLM responses
 - Exploring Intel SGX (and other TEEs) for tamper-proof execution
@@ -25,10 +27,12 @@ Here's what we did (and yes, it's as hacky as it sounds):
 Here are some wild ideas we're excited about:
 
 1. **AI Investment DAOs**
+
    - A DAO that YOLO's into investments by itself
    - Even better: a memecoin investment DAO where you pitch your token and the AI decides
 
 2. **Interactive NFTs**
+
    - Pokemon fantasy league where battles are narrated by AI based on NFT attributes
    - Generative art with an AI merchant you have to haggle with
    - Same concept but for ERC20 tokens
@@ -45,20 +49,22 @@ Here are some wild ideas we're excited about:
 
 - Node.js v19+ (the newer the better)
 - Foundry (for deploying the weird stuff we're building)
-- Some testnet ETH on Optimism (we'll help you bridge it)
+- Some testnet ETH on Sepolia (we'll help you bridge it)
 - A sense of adventure and willingness to break things
 
 ## Development Setup
 
 The usual suspects, but with a twist:
-- VSCode + Solidity extension (for the normal stuff)
+
 - Foundry (for the experimental contract deployment)
 - MetaMask (to hold your testnet funds)
 
 ## Need Help?
 
 When (not if) something breaks:
-- Join our Discord: https://discord.gg/moai
+
+- Join our Telegram: https://t.me/moaicash
+- Follow us on Twitter: https://x.com/moaicash
 - Check the docs (you're reading them!)
 - Try our interactive demo at https://gekkon.moai.ltd
-- Break things and tell us about it! 
+- Break things and tell us about it!

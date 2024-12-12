@@ -31,6 +31,5 @@ mintlify dev
 
 ## Need Help?
 
-- Join our [Discord community](https://discord.gg/moai)
 - Check the [documentation](https://docs.moai.ltd)
 - Try our [interactive demo](https://gekkon.moai.ltd)
