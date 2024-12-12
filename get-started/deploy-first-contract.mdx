@@ -1,0 +1,90 @@
+---
+title: 'Deploy First Contract'
+description: 'Create and deploy an AI-enabled smart contract'
+---
+
+## Create Project
+
+1. Initialize a new Foundry project:
+
+```bash
+forge init ai-greeter
+cd ai-greeter
+```
+
+2. Configure Foundry for Moai Chain:
+
+```toml
+# foundry.toml
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+
+[rpc_endpoints]
+moai = "https://rpc.moai.ltd"
+```
+
+## Write Contract
+
+Create `src/AIGreeter.sol`:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+import "@moai/interfaces/IAI.sol";
+
+contract AIGreeter {
+    IAI public ai;
+    
+    constructor(address _aiAddress) {
+        ai = IAI(_aiAddress);
+    }
+    
+    function greet(string memory name) public view returns (string memory) {
+        return ai.chat("Generate a friendly greeting for " + name);
+    }
+}
+```
+
+## Compile & Deploy
+
+1. Compile the contract:
+
+```bash
+forge build
+```
+
+2. Deploy to Moai Chain:
+
+```bash
+forge create --rpc-url https://rpc.moai.ltd \
+  --private-key YOUR_PRIVATE_KEY \
+  src/AIGreeter.sol:AIGreeter \
+  --constructor-args 0xA1A1A1
+```
+
+## Verify Contract
+
+```bash
+forge verify-contract \
+  --chain-id 80418041 \
+  DEPLOYED_ADDRESS \
+  src/AIGreeter.sol:AIGreeter
+```
+
+## Test Contract
+
+Using Cast CLI:
+
+```bash
+cast call DEPLOYED_ADDRESS "greet(string)" "Alice" \
+  --rpc-url https://rpc.moai.ltd
+```
+
+## Next Steps
+
+- [Try the AI Agent Template](/get-started/ai-agent-template)
+- [Explore AI capabilities](/essentials/what-is-moai-chain)
+- [Learn about safety](/essentials/safety-concerns)

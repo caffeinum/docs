@@ -1,32 +1,36 @@
-# Mintlify Starter Kit
+# Moai Chain Documentation
 
-Click on `Use this template` to copy the Mintlify starter kit. The starter kit contains examples including
+This repository contains the official documentation for Moai Chain - the first L2 blockchain with native AI capabilities.
 
-- Guide pages
-- Navigation
-- Customizations
-- API Reference pages
-- Use of popular components
+## Local Development
 
-### Development
+Install the [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the documentation changes locally:
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the documentation changes locally. To install, use the following command
-
-```
+```bash
 npm i -g mintlify
 ```
 
-Run the following command at the root of your documentation (where mint.json is)
+Run the following command at the root of your documentation (where `mint.json` is):
 
-```
+```bash
 mintlify dev
 ```
 
-### Publishing Changes
+## Structure
 
-Install our Github App to auto propagate changes from your repo to your deployment. Changes will be deployed to production automatically after pushing to the default branch. Find the link to install on your dashboard. 
+- `get-started/` - Getting started guides
+- `essentials/` - Core concepts and features
+- `mint.json` - Documentation configuration
 
-#### Troubleshooting
+## Contributing
 
-- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
-- Page loads as a 404 - Make sure you are running in a folder with `mint.json`
+1. Fork the repository
+2. Create your feature branch
+3. Make your changes
+4. Submit a pull request
+
+## Need Help?
+
+- Join our [Discord community](https://discord.gg/moai)
+- Check the [documentation](https://docs.moai.ltd)
+- Try our [interactive demo](https://gekkon.moai.ltd)

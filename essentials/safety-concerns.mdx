@@ -1,0 +1,67 @@
+---
+title: 'Safety Concerns'
+description: 'Best practices for secure AI integration in smart contracts'
+---
+
+## Understanding the Risks
+
+When working with AI in smart contracts, there are several important safety considerations:
+
+### 1. Output Validation
+
+- AI responses are deterministic but may contain unexpected content
+- Always validate and sanitize AI outputs before using in critical logic
+- Use strict input validation to prevent prompt injection attacks
+
+### 2. Resource Management
+
+- AI operations consume more gas than standard operations
+- Implement appropriate rate limiting
+- Consider gas limits in your contract design
+
+### 3. Testing Requirements
+
+- Test thoroughly with different prompts and edge cases
+- Use fuzzing to find potential vulnerabilities
+- Implement circuit breakers for critical functions
+
+## Best Practices
+
+### Input Sanitization
+
+```solidity
+function safeAICall(string memory input) public {
+    require(validateInput(input), "Invalid input");
+    string memory result = ai.chat(input);
+    require(validateOutput(result), "Invalid AI output");
+    // Process result
+}
+```
+
+### Rate Limiting
+
+```solidity
+uint256 public constant RATE_LIMIT = 10;
+mapping(address => uint256) public lastCallTime;
+
+function rateLimitedAICall() public {
+    require(block.timestamp - lastCallTime[msg.sender] >= RATE_LIMIT, 
+            "Rate limit exceeded");
+    lastCallTime[msg.sender] = block.timestamp;
+    // Make AI call
+}
+```
+
+### Circuit Breakers
+
+```solidity
+bool public paused;
+modifier whenNotPaused() {
+    require(!paused, "Contract is paused");
+    _;
+}
+
+function aiCall() public whenNotPaused {
+    // Make AI call
+}
+``` 

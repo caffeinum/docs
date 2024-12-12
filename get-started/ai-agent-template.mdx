@@ -1,0 +1,85 @@
+---
+title: 'AI Agent Template'
+description: 'Start with our template for AI-powered agents'
+---
+
+## Template Overview
+
+The AI Agent Template provides a starting point for building autonomous AI agents on Moai Chain. It includes:
+
+- Basic agent structure
+- AI integration examples
+- Safety patterns
+- Testing framework
+
+## Quick Start
+
+1. Clone the template:
+
+```bash
+git clone https://github.com/moai-ltd/ai-agent-template
+cd ai-agent-template
+```
+
+2. Install dependencies:
+
+```bash
+forge install
+```
+
+3. Configure environment:
+
+```bash
+cp .env.example .env
+# Edit .env with your details
+```
+
+## Template Structure
+
+```
+├── src/
+│   ├── Agent.sol         # Base agent contract
+│   ├── interfaces/       # AI interfaces
+│   ├── examples/         # Example implementations
+│   └── utils/           # Helper contracts
+├── test/                # Test suite
+└── script/              # Deployment scripts
+```
+
+## Key Components
+
+### Base Agent Contract
+
+```solidity
+// src/Agent.sol
+contract Agent {
+    IAI public ai;
+    
+    // Basic agent functionality
+    function think(string memory input) public view returns (string memory) {
+        return ai.chat(input);
+    }
+    
+    // Image generation
+    function visualize(string memory prompt) public returns (string memory) {
+        return ai.generateImage(prompt);
+    }
+    
+    // Embeddings for similarity search
+    function analyze(string memory text) public view returns (uint256[] memory) {
+        return ai.getEmbedding(text);
+    }
+}
+```
+
+## Example Usage
+
+Check out our example implementations:
+
+- [Trading Agent](/examples/trading-agent)
+- [Content Moderator](/examples/content-moderator)
+- [Game NPC](/examples/game-npc)
+
+## Try Demo
+
+Visit [gekkon.moai.ltd](https://gekkon.moai.ltd) to interact with live agent examples. 
