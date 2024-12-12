@@ -14,7 +14,7 @@
   "topbarLinks": [
     {
       "name": "Community",
-      "url": "https://discord.gg/moai"
+      "url": "https://t.me/moaicash"
     }
   ],
   "topbarCtaButton": {
@@ -43,8 +43,8 @@
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/moai_chain",
-    "github": "https://github.com/moai-ltd",
-    "discord": "https://discord.gg/moai"
+    "twitter": "https://twitter.com/moaicash",
+    "github": "https://github.com/sloikaxyz",
+    "telegram": "https://t.me/moaicash"
   }
 }
