@@ -1,85 +1,156 @@
 ---
 title: 'AI Agent Template'
-description: 'Start with our template for AI-powered agents'
+description: 'Build your own AI-powered treasury manager'
 ---
 
-## Template Overview
+## What's This?
 
-The AI Agent Template provides a starting point for building autonomous AI agents on Moai Chain. It includes:
-
-- Basic agent structure
-- AI integration examples
-- Safety patterns
-- Testing framework
+We've cooked up a template for building autonomous AI agents that can actually control funds on-chain. Yes, you read that right - an AI that can manage real (test) ETH! 
 
 ## Quick Start
 
-1. Clone the template:
+1. Grab our experimental code:
 
 ```bash
 git clone https://github.com/moai-ltd/ai-agent-template
 cd ai-agent-template
 ```
 
-2. Install dependencies:
+2. Get the dependencies:
 
 ```bash
 forge install
 ```
 
-3. Configure environment:
+3. Set up your secret sauce:
 
 ```bash
 cp .env.example .env
-# Edit .env with your details
+# Add your keys (and maybe a prayer 🙏)
 ```
 
-## Template Structure
+## The Good Stuff
 
-```
-├── src/
-│   ├── Agent.sol         # Base agent contract
-│   ├── interfaces/       # AI interfaces
-│   ├── examples/         # Example implementations
-│   └── utils/           # Helper contracts
-├── test/                # Test suite
-└── script/              # Deployment scripts
-```
-
-## Key Components
-
-### Base Agent Contract
+Here's our wildest experiment yet - an AI that manages a treasury:
 
 ```solidity
-// src/Agent.sol
-contract Agent {
-    IAI public ai;
-    
-    // Basic agent functionality
-    function think(string memory input) public view returns (string memory) {
-        return ai.chat(input);
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+interface IAI {
+    function chat(string calldata systemPrompt, string calldata message) external returns (string memory);
+}
+
+contract AIAgent {
+    string public constant AI_PROMPT =
+        "You are a business manager of this DAO treasury. "
+        "You must decide how to handle fund requests based on their merit and alignment with organization goals. "
+        "Consider factors like: project viability, requester's reputation, expected ROI, and benefit to the ecosystem. "
+        "Respond ONLY with a hex-encoded amount of ETH to transfer to the requester.";
+
+    IAI public constant AI_SYSTEM = IAI(address(uint160(0xa1a1a1)));
+
+    error CallFailed();
+    error InvalidResponse();
+
+    receive() external payable {}
+
+    function requestFunds(string calldata userMessage) external {
+        // Combine prompt and user message
+        string memory fullPrompt = string.concat(
+            AI_PROMPT,
+            "\n\nCurrent balance: ",
+            string(abi.encode(address(this).balance)),
+            "\n\nRequestor address: ",
+            string(abi.encode(uint160(msg.sender)))
+        );
+
+        // Ask the AI what it thinks
+        string memory response = AI_SYSTEM.chat(fullPrompt, userMessage);
+
+        if (bytes(response).length == 0) revert InvalidResponse();
+
+        // Clean up the hex string
+        if (bytes(response)[0] == "0" && bytes(response)[1] == "x") {
+            response = substring(response, 2, bytes(response).length);
+        }
+
+        // Convert the AI's decision to bytes
+        bytes memory responseBytes = stringToHex(response);
+
+        uint256 responseValue = uint256(bytes32(responseBytes));
+
+        // YOLO: Send the funds!
+        (bool success, ) = payable(msg.sender).call{value: responseValue}("");
+        if (!success) revert CallFailed();
     }
-    
-    // Image generation
-    function visualize(string memory prompt) public returns (string memory) {
-        return ai.generateImage(prompt);
+
+    // Helper: Convert string to hex (because our AI speaks in hex)
+    function stringToHex(
+        string memory str
+    ) internal pure returns (bytes memory) {
+        bytes memory bytesArray = new bytes(bytes(str).length);
+
+        for (uint256 i = 0; i < bytes(str).length; i++) {
+            bytes1 b = bytes(str)[i];
+
+            if (b >= 0x30 && b <= 0x39) {
+                // 0-9
+                bytesArray[i] = bytes1(uint8(b) - (0x30));
+            } else if (b >= 0x41 && b <= 0x46) {
+                // A-F
+                bytesArray[i] = bytes1(uint8(b) - (0x37));
+            } else if (b >= 0x61 && b <= 0x66) {
+                // a-f
+                bytesArray[i] = bytes1(uint8(b) - (0x57));
+            } else {
+                revert("Invalid hex character");
+            }
+        }
+
+        return bytesArray;
     }
-    
-    // Embeddings for similarity search
-    function analyze(string memory text) public view returns (uint256[] memory) {
-        return ai.getEmbedding(text);
+
+    // Helper: Slice strings (because Solidity can't)
+    function substring(
+        string memory str,
+        uint256 start,
+        uint256 end
+    ) internal pure returns (string memory) {
+        bytes memory strBytes = bytes(str);
+        bytes memory result = new bytes(end - start);
+        for (uint256 i = start; i < end; i++) {
+            result[i - start] = strBytes[i];
+        }
+        return string(result);
     }
 }
 ```
 
-## Example Usage
+## What's Going On Here?
 
-Check out our example implementations:
+This contract is wild:
+1. It's a treasury manager that actually thinks
+2. Users can request funds by explaining their case
+3. The AI reads the request and current balance
+4. If it likes your pitch, it sends you ETH!
 
-- [Trading Agent](/examples/trading-agent)
-- [Content Moderator](/examples/content-moderator)
-- [Game NPC](/examples/game-npc)
+## Project Structure
 
-## Try Demo
+```
+├── src/
+│   ├── AIAgent.sol       # The magic happens here
+│   ├── interfaces/       # How we talk to the AI
+│   └── utils/           # Helper functions
+├── test/                # Because we should test... right?
+└── script/              # Deployment spells
+```
 
-Visit [gekkon.moai.ltd](https://gekkon.moai.ltd) to interact with live agent examples. 
+## Try It Live!
+
+Visit [gekkon.moai.ltd](https://gekkon.moai.ltd) to:
+1. See an AI managing real (test) funds
+2. Try to convince it to send you some ETH
+3. Watch your wallet grow (or your dreams shatter)
+
+Remember: This is experimental tech. Don't try this with real money... yet! 😉 

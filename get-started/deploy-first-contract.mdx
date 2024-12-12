@@ -1,18 +1,18 @@
 ---
 title: 'Deploy First Contract'
-description: 'Create and deploy an AI-enabled smart contract'
+description: 'Let's put some AI on the blockchain!'
 ---
 
-## Create Project
+## Setup Your Lab
 
-1. Initialize a new Foundry project:
+First, let's get Foundry going (because we're doing serious experimentation here):
 
 ```bash
 forge init ai-greeter
 cd ai-greeter
 ```
 
-2. Configure Foundry for Moai Chain:
+Tell Foundry where our playground is:
 
 ```toml
 # foundry.toml
@@ -22,12 +22,12 @@ out = "out"
 libs = ["lib"]
 
 [rpc_endpoints]
-moai = "https://rpc.moai.ltd"
+moai = "https://rpc.moai.ltd"  # where the magic happens
 ```
 
-## Write Contract
+## The Fun Part: Writing Code
 
-Create `src/AIGreeter.sol`:
+Create `src/AIGreeter.sol` - this is where we'll make the AI talk:
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -37,35 +37,37 @@ import "@moai/interfaces/IAI.sol";
 
 contract AIGreeter {
     IAI public ai;
-    
+
     constructor(address _aiAddress) {
-        ai = IAI(_aiAddress);
+        ai = IAI(_aiAddress);  // hook up to our AI precompile
     }
-    
+
     function greet(string memory name) public view returns (string memory) {
-        return ai.chat("Generate a friendly greeting for " + name);
+        // using "" for empty system prompt
+        return ai.chat("", "Generate a friendly greeting for " + name);
     }
 }
 ```
 
-## Compile & Deploy
+## Launch It Into The Wild
 
-1. Compile the contract:
+1. Build that bad boy:
 
 ```bash
 forge build
 ```
 
-2. Deploy to Moai Chain:
+2. Deploy to our experimental chain:
 
 ```bash
-forge create --rpc-url https://rpc.moai.ltd \
+forge create -r moai \
   --private-key YOUR_PRIVATE_KEY \
-  src/AIGreeter.sol:AIGreeter \
-  --constructor-args 0xA1A1A1
+  src/AIGreeter.sol:AIGreeter
 ```
 
-## Verify Contract
+## Let Everyone Know It's Yours
+
+(Verification is flaky, but we'll try anyway)
 
 ```bash
 forge verify-contract \
@@ -74,17 +76,29 @@ forge verify-contract \
   src/AIGreeter.sol:AIGreeter
 ```
 
-## Test Contract
+## Play Time!
 
-Using Cast CLI:
+Let's talk to our AI directly first:
 
 ```bash
-cast call DEPLOYED_ADDRESS "greet(string)" "Alice" \
+# Ask the AI about tigers vs bears (yes, really!)
+cast call -r https://rpc.moai.ltd \
+  0x0000000000000000000000000000000000A1A1A1 \
+  "chat(string,string)(string)" \
+  "is tiger" "is tiger bigger than bear?"
+```
+
+Then try your deployed greeter:
+
+```bash
+cast call DEPLOYED_ADDRESS "greet(string)" "CryptoFriend" \
   --rpc-url https://rpc.moai.ltd
 ```
 
-## Next Steps
+## What's Next?
 
-- [Try the AI Agent Template](/get-started/ai-agent-template)
-- [Explore AI capabilities](/essentials/what-is-moai-chain)
-- [Learn about safety](/essentials/safety-concerns)
+Now that you've got your feet wet:
+
+- [Try our AI Agent Template](/get-started/ai-agent-template) (it's wild!)
+- [Learn what else AI can do](/essentials/what-is-moai-chain)
+- [Don't get rekt](/essentials/safety-concerns)

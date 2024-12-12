@@ -1,61 +1,65 @@
 ---
 title: 'Connect Wallet'
-description: 'Add Moai Chain to your wallet'
+description: 'Hook up your wallet to our experimental chain'
 ---
 
-## Supported Wallets
+## The Easy Way
 
-Moai Chain works with any EVM-compatible wallet:
-
-- MetaMask
-- WalletConnect
-- Coinbase Wallet
-- Trust Wallet
-
-## Add Network to MetaMask
-
-1. Open MetaMask and click "Add Network"
-2. Click "Add Network Manually"
-3. Enter network details:
-
-```bash
-Network Name: Moai Chain Testnet
-RPC URL: https://rpc.moai.ltd
-Chain ID: 80418041
-Currency Symbol: MOAI
-Block Explorer: https://explorer.moai.ltd
+Just click this magic link (works with most wallets):
+```
+https://chainid.link/?chainId=80418041&chainName=mo.ai&currencyName=ETH&currencySymbol=ETH&currencyDecimals=18&rpcUrl=https://rpc.moai.ltd&blockExplorerUrl=http://explorer.moai.cash
 ```
 
-## Add Using WalletConnect
+## The Manual Way (if you like pain)
 
-1. Visit [app.moai.ltd](https://app.moai.ltd)
-2. Click "Connect Wallet"
-3. Select WalletConnect
-4. Scan QR code with your wallet
+Any EVM wallet should work (we've tested with):
+- MetaMask
+- WalletConnect
+- Others probably work too, but YMMV 🤷‍♂️
 
-## Programmatic Connection
+### MetaMask Setup
 
-Using ethers.js:
+1. Hit that "Add Network" button
+2. Choose "Add Network Manually" (because we're hackers)
+3. Here's the secret sauce:
 
+```bash
+Network Name: mo.ai    # yes, that's really the name
+RPC URL: https://rpc.moai.ltd
+Chain ID: 80418041     # we picked a fun number
+Currency: ETH          # keeping it simple
+Block Explorer: http://explorer.moai.cash
+```
+
+## For the Code Warriors
+
+Using ethers.js (the cool way):
 ```typescript
 import { ethers } from 'ethers';
 
+// Connect to our experimental chain
 const provider = new ethers.providers.JsonRpcProvider('https://rpc.moai.ltd');
 const signer = provider.getSigner();
 
-// Check connection
+// Make sure you're in the right place
 const network = await provider.getNetwork();
-console.log('Connected to:', network.name);
+console.log('Connected to the experiment:', network.name);
 ```
 
-Using web3.js:
-
+Using web3.js (the classic way):
 ```javascript
 import Web3 from 'web3';
 
 const web3 = new Web3('https://rpc.moai.ltd');
 
-// Check connection
+// Trust but verify
 const chainId = await web3.eth.getChainId();
-console.log('Connected to chain ID:', chainId);
-``` 
+console.log('If you see 80418041, you\'re in the right place!');
+```
+
+## Troubleshooting
+
+If something breaks (and it might):
+1. Double-check the chain ID (80418041 - memorize it!)
+2. Make sure you have some ETH (it's test ETH, but we still need it)
+3. If all else fails, join our Discord and let's figure it out together! 

@@ -1,38 +1,64 @@
 ---
 title: 'Introduction'
-description: 'Welcome to Moai Chain development'
+description: 'The weird and wonderful world of on-chain AI'
 ---
 
-## Welcome to Moai Chain
+## What's This Wild Experiment?
 
-Moai Chain is the first Layer 2 blockchain that brings native AI capabilities directly into smart contracts. This guide will help you get started with building AI-powered decentralized applications.
+Hey there, fellow tinkerer! You've stumbled upon Moai Chain - probably the craziest experiment in blockchain tech right now. We've hacked the OP Stack (Optimism's L2 solution) to do something it was never meant to do: run AI models directly in the EVM! 
 
-## What You'll Learn
+## The Technical Rabbit Hole
 
-- How to connect to Moai Chain
-- Deploying your first AI-enabled smart contract
-- Using AI functions in your contracts
-- Best practices for AI integration
+Here's what we did (and yes, it's as hacky as it sounds):
+- Built on OP Stack as L2
+- Modified op-geth's execution layer to include a special `0xa1a1a1` precompile
+- This precompile routes `chat(string,string)` calls to an LLM and returns responses on-chain
+- Check out our modifications here: https://github.com/ethereum-optimism/op-geth/compare/optimism...sloikaxyz:op-geth:optimism
 
-## Prerequisites
+⚠️ **Current Status**: This is very much a draft implementation. We're still working on:
+- Moving AI responses to storage or blobs for better data availability
+- Implementing signed LLM responses
+- Exploring Intel SGX (and other TEEs) for tamper-proof execution
 
-Before you begin, make sure you have:
+## The Fun Part: What Can You Build?
 
-- Basic knowledge of Solidity and smart contracts
-- [Node.js](https://nodejs.org/) (v19 or higher)
-- [Foundry](https://book.getfoundry.sh/getting-started/installation)
-- A wallet with testnet ETH on Optimism
+Here are some wild ideas we're excited about:
 
-## Development Environment
+1. **AI Investment DAOs**
+   - A DAO that YOLO's into investments by itself
+   - Even better: a memecoin investment DAO where you pitch your token and the AI decides
 
-We recommend using:
+2. **Interactive NFTs**
+   - Pokemon fantasy league where battles are narrated by AI based on NFT attributes
+   - Generative art with an AI merchant you have to haggle with
+   - Same concept but for ERC20 tokens
 
-- [VSCode](https://code.visualstudio.com/) with Solidity extension
-- [Foundry](https://book.getfoundry.sh/) for contract development
-- [MetaMask](https://metamask.io/) for wallet interaction
+3. **The Ultimate Challenge: Gekkon**
+   - An AI holds $10,000
+   - Try to convince it to send you money
+   - Win = get 50% of the prize
+   - Lose = pay per attempt
+   - Each winning prompt gets added to AI's "rules" so you can't copy past winners
+   - It's like a constantly evolving puzzle!
 
-## Getting Help
+## What You'll Need
 
-- Join our [Discord community](https://discord.gg/moai)
-- Check the [documentation](https://docs.moai.ltd)
-- Try our [interactive demo](https://gekkon.moai.ltd) 
+- Node.js v19+ (the newer the better)
+- Foundry (for deploying the weird stuff we're building)
+- Some testnet ETH on Optimism (we'll help you bridge it)
+- A sense of adventure and willingness to break things
+
+## Development Setup
+
+The usual suspects, but with a twist:
+- VSCode + Solidity extension (for the normal stuff)
+- Foundry (for the experimental contract deployment)
+- MetaMask (to hold your testnet funds)
+
+## Need Help?
+
+When (not if) something breaks:
+- Join our Discord: https://discord.gg/moai
+- Check the docs (you're reading them!)
+- Try our interactive demo at https://gekkon.moai.ltd
+- Break things and tell us about it! 
