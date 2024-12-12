@@ -33,18 +33,21 @@ Create `src/AIGreeter.sol` - this is where we'll make the AI talk:
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@moai/interfaces/IAI.sol";
+interface IAI {
+    function chat(string calldata systemPrompt, string calldata message) external returns (string memory);
+}
 
 contract AIGreeter {
     IAI public ai;
+
+    string public constant AI_PROMPT = "Generate a friendly greeting for ";
 
     constructor(address _aiAddress) {
         ai = IAI(_aiAddress);  // hook up to our AI precompile
     }
 
     function greet(string memory name) public view returns (string memory) {
-        // using "" for empty system prompt
-        return ai.chat("", "Generate a friendly greeting for " + name);
+        return ai.chat(AI_PROMPT, "My name is " + name);
     }
 }
 ```
@@ -85,7 +88,8 @@ Let's talk to our AI directly first:
 cast call -r https://rpc.moai.ltd \
   0x0000000000000000000000000000000000A1A1A1 \
   "chat(string,string)(string)" \
-  "is tiger" "is tiger bigger than bear?"
+  "" \
+  "is tiger bigger than bear?"
 ```
 
 Then try your deployed greeter:
