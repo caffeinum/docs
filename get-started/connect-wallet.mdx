@@ -1,20 +1,18 @@
 ---
-title: 'Connect Wallet'
-description: 'Hook up your wallet to our experimental chain'
+title: "Connect Wallet"
+description: "Hook up your wallet to our experimental chain"
 ---
 
 ## The Easy Way
 
-Just click this magic link (works with most wallets):
-```
-https://chainid.link/?chainId=80418041&chainName=mo.ai&currencyName=ETH&currencySymbol=ETH&currencyDecimals=18&rpcUrl=https://rpc.moai.ltd&blockExplorerUrl=http://explorer.moai.cash
-```
+Just click this [magic link](https://chainid.link/?chainId=80418041&chainName=mo.ai&currencyName=ETH&currencySymbol=ETH&currencyDecimals=18&rpcUrl=https://rpc.moai.ltd&blockExplorerUrl=http://explorer.moai.cash) and press Connect (works with most wallets)
 
 ## The Manual Way (if you like pain)
 
 Any EVM wallet should work (we've tested with):
+
 - MetaMask
-- WalletConnect
+- Trust Wallet
 - Others probably work too, but YMMV 🤷‍♂️
 
 ### MetaMask Setup
@@ -28,38 +26,35 @@ Network Name: mo.ai    # yes, that's really the name
 RPC URL: https://rpc.moai.ltd
 Chain ID: 80418041     # we picked a fun number
 Currency: ETH          # keeping it simple
-Block Explorer: http://explorer.moai.cash
+Block Explorer: https://explorer.moai.cash
 ```
 
 ## For the Code Warriors
 
-Using ethers.js (the cool way):
+Using `viem` (the cool way):
+
 ```typescript
-import { ethers } from 'ethers';
+import { Chain } from "viem";
 
-// Connect to our experimental chain
-const provider = new ethers.providers.JsonRpcProvider('https://rpc.moai.ltd');
-const signer = provider.getSigner();
-
-// Make sure you're in the right place
-const network = await provider.getNetwork();
-console.log('Connected to the experiment:', network.name);
-```
-
-Using web3.js (the classic way):
-```javascript
-import Web3 from 'web3';
-
-const web3 = new Web3('https://rpc.moai.ltd');
-
-// Trust but verify
-const chainId = await web3.eth.getChainId();
-console.log('If you see 80418041, you\'re in the right place!');
+export const moai: Chain = {
+  id: 80418041,
+  name: "mo.ai",
+  rpcUrls: {
+    public: { http: ["https://rpc.moai.cash"] },
+    default: { http: ["https://rpc.moai.cash"] },
+  },
+  nativeCurrency: {
+    name: "ETH",
+    symbol: "ETH",
+    decimals: 18,
+  },
+};
 ```
 
 ## Troubleshooting
 
 If something breaks (and it might):
+
 1. Double-check the chain ID (80418041 - memorize it!)
 2. Make sure you have some ETH (it's test ETH, but we still need it)
-3. If all else fails, join our Discord and let's figure it out together! 
+3. If all else fails, join our Telegram group and let's figure it out together!
