@@ -1,106 +1,164 @@
 ---
-title: 'Development'
-description: 'Preview changes locally to update your docs'
+title: 'Moai Chain Development'
+description: 'Learn how to build with the first L2 blockchain with native AI capabilities.'
 ---
 
 <Info>
-  **Prerequisite**: Please install Node.js (version 19 or higher) before proceeding.
+  **Prerequisite**: Please install Node.js (version 19 or higher) and Foundry before proceeding.
 </Info>
 
-Follow these steps to install and run Mintlify on your operating system:
+## Quickstart
 
-**Step 1**: Install Mintlify:
+Get started with Moai Chain in minutes:
 
-<CodeGroup>
+1. **Add network to your wallet**
 
-  ```bash npm
-  npm i -g mintlify
-  ```
+    -   Chain ID: `80418041`
+    -   RPC URL: `https://rpc.moai.ltd`
+    -   Currency: `MOAI`
+2. **Get testnet tokens**
 
-```bash yarn
-yarn global add mintlify
-```
+    -   Visit `faucet.moai.ltd`
 
-</CodeGroup>
+## Deploy First Contract
 
-**Step 2**: Navigate to the docs directory (where the `mint.json` file is located) and execute the following command:
+### 1. Get MOAI tokens
 
-```bash
-mintlify dev
-```
+To deploy contracts on Moai Chain, you'll need MOAI tokens. You can get them in two ways:
 
-A local preview of your documentation will be available at `http://localhost:3000`.
+-   Use the bridge at [bridge.moai.ltd](https://bridge.moai.ltd) to bridge ETH from Optimism
+-   Get testnet tokens from [faucet.moai.ltd](https://faucet.moai.ltd)
 
-### Custom Ports
+### 2. Set up Foundry
 
-By default, Mintlify uses port 3000. You can customize the port Mintlify runs on by using the `--port` flag. To run Mintlify on port 3333, for instance, use this command:
+We'll use Foundry for development. First, install it:
 
 ```bash
-mintlify dev --port 3333
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
 ```
 
-If you attempt to run Mintlify on a port that's already in use, it will use the next available port:
+### 3. Create new project
 
-```md
-Port 3000 is already in use. Trying 3001 instead.
-```
-
-## Mintlify Versions
-
-Please note that each CLI release is associated with a specific version of Mintlify. If your local website doesn't align with the production version, please update the CLI:
-
-<CodeGroup>
-
-```bash npm
-npm i -g mintlify@latest
-```
-
-```bash yarn
-yarn global upgrade mintlify
-```
-
-</CodeGroup>
-
-## Validating Links
-
-The CLI can assist with validating reference links made in your documentation. To identify any broken links, use the following command:
+Initialize a new Foundry project:
 
 ```bash
-mintlify broken-links
+forge init ai-greeter
+cd ai-greeter
 ```
 
-## Deployment
+### 4. Configure Foundry
 
-<Tip>
-  Unlimited editors available under the [Pro
-  Plan](https://mintlify.com/pricing) and above.
-</Tip>
+Create `foundry.toml` with Moai Chain configuration:
 
-If the deployment is successful, you should see the following:
+```toml
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
 
-<Frame>
-  <img src="/images/checks-passed.png" style={{ borderRadius: '0.5rem' }} />
-</Frame>
+[rpc_endpoints]
+moai = "https://rpc.moai.ltd"
 
-## Code Formatting
+[etherscan]
+moai = { key = "" } # No key needed for Moai Chain
+```
 
-We suggest using extensions on your IDE to recognize and format MDX. If you're a VSCode user, consider the [MDX VSCode extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) for syntax highlighting, and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting.
+### 5. Create Contract
+
+Create `src/AIGreeter.sol`:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+import "@moai/interfaces/IAI.sol";
+
+contract AIGreeter {
+    IAI public ai;
+    
+    constructor(address _aiAddress) {
+        ai = IAI(_aiAddress);
+    }
+    
+    function greet(string memory name) public view returns (string memory) {
+        return ai.chat("Generate a friendly greeting for " + name);
+    }
+}
+```
+
+### 6. Deploy Contract
+
+Deploy to Moai Chain using your private key (replace with your actual key):
+
+```bash
+forge create --rpc-url https://rpc.moai.ltd \
+  --private-key YOUR_PRIVATE_KEY \
+  src/AIGreeter.sol:AIGreeter \
+  --constructor-args 0xA1A1A1
+```
+
+<Note>
+The AI interface is available at address `0xA1A1A1` on Moai Chain
+</Note>
+
+## AI Interface Reference
+
+Core AI functions available at `0xA1A1A1`:
+
+```solidity
+interface IAI {
+    // Generate text response
+    function chat(string memory prompt) external view returns (string memory);
+    
+    // Generate image (returns IPFS hash)
+    function generateImage(string memory prompt) external returns (string memory);
+    
+    // Get embedding vector
+    function getEmbedding(string memory text) external view returns (uint256[] memory);
+}
+```
+
+## Why AI?
+
+Benefits of onchain AI:
+
+-   Deterministic results - same input always produces same output
+-   Composable with other smart contracts
+-   No centralized AI providers or oracles needed
+-   Pay for compute with gas, no API keys required
+
+## Safety
+
+Important safety considerations:
+
+-   AI responses are deterministic but may contain unexpected content
+-   Always validate and sanitize AI outputs before using in critical logic
+-   Consider rate limiting to prevent abuse
+-   Test thoroughly with different prompts and edge cases
+
+## Contribute
+
+Help improve Moai Chain:
+
+-   Source code: [github.com/sloikaxyz/op-geth](https://github.com/sloikaxyz/op-geth)
+-   Report issues and submit PRs
+-   Join our [Discord community](https://discord.gg/moai)
 
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title='Error: Could not load the "sharp" module using the darwin-arm64 runtime'>
-
-    This may be due to an outdated version of node. Try the following:
-    1. Remove the currently-installed version of mintlify: `npm remove -g mintlify`
-    2. Upgrade to Node v19 or higher.
-    3. Reinstall mintlify: `npm install -g mintlify`
-  </Accordion>
-
   <Accordion title="Issue: Encountering an unknown error">
   
     Solution: Go to the root of your device and delete the \~/.mintlify folder. Afterwards, run `mintlify dev` again.
   </Accordion>
 </AccordionGroup>
 
-Curious about what changed in the CLI version? [Check out the CLI changelog.](https://www.npmjs.com/package/mintlify?activeTab=versions)
+## Need More Help?
+
+<div className="mt-8 text-center">
+  <p className="text-muted-foreground mb-4">
+    Need help? Join our developer community
+  </p>
+  <Button variant="outline">Join Community</Button>
+</div>
